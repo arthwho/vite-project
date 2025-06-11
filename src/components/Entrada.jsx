@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { TextInput, Button } from 'flowbite-react';
+import { TextInput, Button, Spinner } from 'flowbite-react';
 import { GiMagicLamp } from "react-icons/gi";
 import oracleImage from '../assets/AdobeStock_334546874 [Convertido].svg';
 import GlitterEffect from './GlitterEffect';
@@ -9,6 +9,9 @@ function Entrada() {
     const [input, setInput] = useState("");
     const [response, setResponse] = useState("");
     const [title, setTitle] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+
+    const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
     const phrases = [
         "Pergunte ao Oráculo",
@@ -29,12 +32,13 @@ function Entrada() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setResponse("");
+        setIsLoading(true);
         try {
-            const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=API_KEY', {
+            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'API_KEY',
+                    'Authorization': API_KEY,
                 },
                 body: JSON.stringify({
                     contents: [
@@ -52,6 +56,8 @@ function Entrada() {
             setResponse(data.candidates?.[0]?.content?.parts?.[0]?.text || "Sem resposta do Oráculo.");
         } catch (err) {
             setResponse("Erro ao consultar o Oráculo.");
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -80,14 +86,27 @@ function Entrada() {
                                 }}
                                 value={input}
                                 onChange={e => setInput(e.target.value)}
+                                disabled={isLoading}
                             />
                         </div>
-                        <Button type="submit" gradientDuoTone="purpleToBlue" className="whitespace-nowrap">
-                            Perguntar
+                        <Button 
+                            type="submit" 
+                            gradientDuoTone="purpleToBlue" 
+                            className="whitespace-nowrap min-w-[120px]"
+                            disabled={isLoading}
+                        >
+                            {isLoading ? (
+                                <div className="flex items-center gap-2">
+                                    <Spinner size="sm" color="white" />
+                                    <span>Consultando...</span>
+                                </div>
+                            ) : (
+                                "Perguntar"
+                            )}
                         </Button>
                     </form>
                     {response && (
-                        <div className="mt-4 text-neutral-50 bg-neutral-800 p-4 rounded">
+                        <div className="mt-4 text-neutral-50 p-4 rounded-b-3xl border-t-2 border-neutral-500">
                             {response}
                         </div>
                     )}

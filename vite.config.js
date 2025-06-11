@@ -6,5 +6,6 @@ export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
     include: ['flowbite-react']
-  }
+  },
+  base: '/vite-project', // Replace with your repository name
 })
