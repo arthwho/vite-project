@@ -1,0 +1,24 @@
+.custom-nav-link:hover,
+.custom-nav-link:hover span,
+.custom-nav-link[data-active="true"]:hover,
+.custom-nav-link[data-active="true"]:hover span {
+    border-width: 2px !important;
+    border-style: solid !important;
+    border-color: #808080 !important;
+}
+
+/* Target the inner span element */
+.custom-nav-link span,
+.custom-nav-link[data-active="true"] span {
+    background-color: transparent !important;
+    color: #fff !important; /* text-blue-400 */
+    border-width: 2px !important;
+}
+
+/* Ensure text color is consistent */
+.custom-nav-link,
+.custom-nav-link[data-active="true"] {
+    color: #fff !important; /* text-blue-400 */
+    border-width: 2px !important;
+    border-color: transparent !important;
+} 

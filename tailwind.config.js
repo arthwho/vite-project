@@ -38,7 +38,7 @@ export default {
           "--color-on-secondary": '#ffffff',
           "--color-on-tertiary": '#ffffff',
           "--color-on-elevate": '#ffffff',
-          "--color-on-surface": theme('colors.neutral.50'),
+          "--color-on-surface": theme('colors.neutral.700'),
         },
       });
     }),
