@@ -8,13 +8,15 @@ import Sobre from './components/Sobre'
 import './App.css'
 
 function App() {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <Flowbite>
       <BrowserRouter basename="/vite-project">
-        <Navbar fluid rounded className="fixed top-0 left-0 right-0 w-full z-50 bg-surface p-4 ">
+        <Navbar fluid rounded className="fixed top-0 left-0 right-0 w-full z-50 bg-surface p-4">
           <div className="flex justify-between items-center w-full">
             <div className="flex-1"></div>
-            <Navbar.Collapse className="flex justify-center bg-neutral-700 rounded-full">
+            <Navbar.Collapse className={`flex justify-center bg-neutral-700 rounded-full ${isOpen ? 'block' : 'hidden md:flex'}`}>
               <Navbar.Link as={Link} to="/" active className="transition-colors duration-200 rounded-full [&>span]: custom-nav-link flex items-center" style={{ padding: '6px 14px'}}>
                 <GiMagicPalm className="mr-2 h-5 w-5" />
                 Consultar
@@ -25,7 +27,15 @@ function App() {
               </Navbar.Link>
             </Navbar.Collapse>
             <div className="flex-1 flex justify-end">
-              <Navbar.Toggle />
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="md:hidden inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+              >
+                <span className="sr-only">Open main menu</span>
+                <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h15M1 7h15M1 13h15"/>
+                </svg>
+              </button>
             </div>
           </div>
         </Navbar>

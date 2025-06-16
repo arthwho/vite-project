@@ -9,6 +9,21 @@ html {
   box-sizing: inherit;
 }
 
+@property --gradient-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes rotation {
+  0% {
+    --gradient-angle: 0deg;
+  }
+  100% {
+    --gradient-angle: 360deg;
+  }
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -21,6 +36,13 @@ html {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Glow border colora */
+  --clr-1: #052b2f;
+  --clr-2: #073438;
+  --clr-3: #0e4b50;
+  --clr-4: #2d8f85;
+  --clr-5: #637c54;
 }
 
 body {
@@ -48,6 +70,25 @@ button {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+.glow-border {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--clr-5);
+}
+
+.glow-border::before,
+.glow-border::after {
+  content: "";
+  position: absolute;
+  inset: -.5rem;
+  z-index: -1;
+  background: conic-gradient(from var(--gradient-angle), var(--clr-3), var(--clr-4), var(--clr-5), var(--clr-4), var(--clr-3));
+  filter: blur(3.5rem);
+  animation: rotation 20s linear infinite;
+  z-index: -1;
 }
 
 @media (prefers-color-scheme: light) {

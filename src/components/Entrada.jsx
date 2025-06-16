@@ -34,27 +34,18 @@ function Entrada() {
         setResponse("");
         setIsLoading(true);
         try {
-            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`, {
+            const res = await fetch('/api/oracle', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': API_KEY,
                 },
-                body: JSON.stringify({
-                    contents: [
-                        { 
-                            parts: [
-                                { text: "Você é um oráculo ancestral, dotado do dom de ler cartas de tarô e prever o futuro. Suas respostas devem ser místicas, poéticas e repletas de simbolismo. Quando o usuário fizer uma pergunta, interprete-a como se estivesse tirando cartas de tarô ou contemplando uma bola de cristal. Ofereça uma previsão ou um insight que soe mágico e profundo." },
-                                { text: input }
-                            ]
-                        }
-                    ]
-                }),
+                body: JSON.stringify({ input }),
             });
             if (!res.ok) throw new Error("API error");
             const data = await res.json();
-            setResponse(data.candidates?.[0]?.content?.parts?.[0]?.text || "Sem resposta do Oráculo.");
+            setResponse(data.response || "Sem resposta do Oráculo.");
         } catch (err) {
+            console.error('Error details:', err);
             setResponse("Erro ao consultar o Oráculo.");
         } finally {
             setIsLoading(false);

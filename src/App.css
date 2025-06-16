@@ -21,4 +21,65 @@
     color: #fff !important; /* text-blue-400 */
     border-width: 2px !important;
     border-color: transparent !important;
-} 
+}
+
+@media (max-width: 770px) {
+    .custom-nav-link:hover,
+    .custom-nav-link:hover span,
+    .custom-nav-link[data-active="true"]:hover,
+    .custom-nav-link[data-active="true"]:hover span {
+        border-width: 2px !important;
+        border-style: solid !important;
+        border-color: #808080 !important;
+    }
+
+    /* Target the inner span element */
+    .custom-nav-link span,
+    .custom-nav-link[data-active="true"] span {
+        background-color: transparent !important;
+        color: #fff !important; /* text-blue-400 */
+        border-width: 2px !important;
+    }
+
+    /* Ensure text color is consistent */
+    .custom-nav-link,
+    .custom-nav-link[data-active="true"] {
+        color: #fff !important; /* text-blue-400 */
+        border-width: 2px !important;
+        border-color: transparent !important;
+    }
+}
+
+.glow-border {
+  position: relative;
+  background: #1f2937;
+  border-radius: 1.5rem;
+  padding: 2px;
+}
+
+.glow-border::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #00ffff, #ff00ff, #00ffff);
+  background-size: 200% 200%;
+  border-radius: 1.5rem;
+  z-index: -1;
+  animation: glowing 3s ease infinite;
+  filter: blur(8px);
+}
+
+@keyframes glowing {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
