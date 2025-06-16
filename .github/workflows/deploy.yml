@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages and Render
+name: Deploy to GitHub Pages
 
 on:
   push:
@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build-frontend:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -43,40 +43,13 @@ jobs:
         with:
           path: './dist'
 
-  deploy-frontend:
+  deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: build-frontend
+    needs: build
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
-
-  deploy-backend:
-    runs-on: ubuntu-latest
-    needs: build-frontend
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
-        working-directory: ./backend
-        run: npm install
-
-      - name: Deploy to Render
-        uses: render-actions/deploy@v1
-        with:
-          service-id: ${{ secrets.RENDER_SERVICE_ID }}
-          api-key: ${{ secrets.RENDER_API_KEY }}
-          environment: production
-          environment-variables: |
-            GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}
-            NODE_ENV=production 
+        uses: actions/deploy-pages@v4 
