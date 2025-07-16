@@ -1,4 +1,4 @@
-# **CSI606-2025-01 - Remoto - Proposta de Trabalho Final**
+# **CSI606/CSI504-2025-01 - Trabalho Final**
 
 ## Discente: Arthur Silva Ferreira Coelho
 
