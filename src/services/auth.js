@@ -1,6 +1,9 @@
 import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import DatabaseMethods from "./database.js";
 
+//Arthur Silva Ferreira Coelho
+//22.2.8100
+
 class AuthMethods {
   constructor() {
     this.auth = getAuth();
@@ -33,10 +36,7 @@ class AuthMethods {
           console.log("✅ User successfully saved to Firestore");
         } catch (dbError) {
           console.error("❌ Error saving to Firestore:", dbError);
-          // Don't throw here, user is still authenticated
         }
-        
-        // Show success message (you can implement a toast notification here)
         console.log("Usuário criado com sucesso");
         
         return { success: true, user: userDetails };
@@ -68,7 +68,6 @@ class AuthMethods {
           console.log("✅ User successfully saved to Firestore");
         } catch (dbError) {
           console.error("❌ Error saving to Firestore:", dbError);
-          // Don't throw here, user is still authenticated
         }
         
         console.log("Usuário criado com sucesso");

@@ -4,12 +4,18 @@ import { TextInput, Button, Spinner } from 'flowbite-react';
 import { GiMagicLamp } from "react-icons/gi";
 import oracleImage from '../assets/AdobeStock_334546874 [Convertido].svg';
 import GlitterEffect from './GlitterEffect';
+import DatabaseMethods from '../services/database.js';
 
 function Entrada() {
     const [input, setInput] = useState("");
     const [response, setResponse] = useState("");
     const [title, setTitle] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [currentUser, setCurrentUser] = useState(null);
+    const db = new DatabaseMethods();
+
+    // Hardcoded admin email for demo
+    const ADMIN_EMAIL = 'arthwho@gmail.com';
 
     const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
@@ -27,6 +33,8 @@ function Entrada() {
     useEffect(() => {
         const randomIndex = Math.floor(Math.random() * phrases.length);
         setTitle(phrases[randomIndex]);
+        // Get current user
+        db.getCurrentUser().then(setCurrentUser);
     }, []);
 
     const handleSubmit = async (e) => {
@@ -34,16 +42,52 @@ function Entrada() {
         setResponse("");
         setIsLoading(true);
         try {
-            const res = await fetch('/api/oracle', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ input }),
-            });
-            if (!res.ok) throw new Error("API error");
-            const data = await res.json();
-            setResponse(data.response || "Sem resposta do Oráculo.");
+            if (input.startsWith('\\s')) {
+                // Special admin search
+                if (!currentUser || currentUser.email !== ADMIN_EMAIL) {
+                    setResponse('Acesso negado: apenas administradores podem usar este comando.');
+                } else {
+                    // Extract the search query after '\s'
+                    const searchQuery = input.substring(2).trim();
+                    
+                    if (!searchQuery) {
+                        setResponse('Por favor, especifique uma query. Exemplos:\n' +
+                                  '• list users\n' +
+                                  '• find users Email == "user@example.com"\n' +
+                                  '• order users Name asc\n' +
+                                  '• limit users 5');
+                    } else {
+                        try {
+                            const documents = await db.executeQuery(searchQuery);
+                            if (documents.length > 0) {
+                                const formattedDocs = documents.map((doc, index) => {
+                                    const docData = Object.entries(doc)
+                                        .filter(([key]) => key !== 'id')
+                                        .map(([key, value]) => `  ${key}: ${value}`)
+                                        .join('\n');
+                                    return `📄 Documento ${index + 1} (ID: ${doc.id}):\n${docData}`;
+                                }).join('\n\n');
+                                setResponse(`✅ Resultados da query '${searchQuery}' (${documents.length} documento(s)):\n\n${formattedDocs}`);
+                            } else {
+                                setResponse(`❌ Nenhum resultado encontrado para a query '${searchQuery}'.`);
+                            }
+                        } catch (error) {
+                            setResponse(`❌ Erro na query '${searchQuery}': ${error.message}`);
+                        }
+                    }
+                }
+            } else {
+                const res = await fetch('/api/oracle', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ input }),
+                });
+                if (!res.ok) throw new Error("API error");
+                const data = await res.json();
+                setResponse(data.response || "Sem resposta do Oráculo.");
+            }
         } catch (err) {
             console.error('Error details:', err);
             setResponse("Erro ao consultar o Oráculo.");
@@ -97,7 +141,7 @@ function Entrada() {
                         </Button>
                     </form>
                     {response && (
-                        <div className="mt-4 text-neutral-50 p-4 rounded-b-3xl border-t-2 border-neutral-500">
+                        <div className="mt-4 text-neutral-50 p-4 rounded-b-3xl border-t-2 border-neutral-500 whitespace-pre-wrap">
                             {response}
                         </div>
                     )}
