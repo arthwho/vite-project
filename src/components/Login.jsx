@@ -88,16 +88,19 @@ function Login() {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 p-4">
+        <div className="flex flex-col items-center justify-center">
             <div className="w-full max-w-md">
                 <Card className="bg-white/10 backdrop-blur-md border-white/20">
                     <div className="text-center mb-6">
                         <GiMagicLamp className="mx-auto h-12 w-12 text-yellow-400 mb-4" />
                         <h1 className="text-2xl font-bold text-white mb-2">
-                            {isSignUp ? "Criar Conta" : "Entrar no Oráculo"}
+                            {isSignUp ? "Criar Conta" : "Bem vindo ao Oráculo"}
                         </h1>
                         <p className="text-gray-300 text-sm">
-                            {isSignUp ? "Junte-se ao mistério" : "Acesse a sabedoria ancestral"}
+                            {isSignUp ? "Junte-se ao mistério" : "Consulte a sabedoria ancestral!"}
+                        </p>
+                        <p className="text-gray-300 text-sm">
+                            {isSignUp ? "Crie uma conta para começar a usar o Oráculo" : "Faça login para continuar"}
                         </p>
                     </div>
 

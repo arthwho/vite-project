@@ -101,13 +101,6 @@ button:focus-visible {
   }
 }
 
-form {
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
-  width: 100%;
-}
-
 input {
   padding: 0.5rem;
   border-radius: 4px;
